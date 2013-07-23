@@ -1,3 +1,3 @@
 public interface Uploader {
-	public String uploadScreenshot(String filename) throws Exception;
+    public String uploadScreenshot(String filename) throws Exception;
 }
