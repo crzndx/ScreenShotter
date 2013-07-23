@@ -27,7 +27,8 @@ import com.jcraft.jsch.*;
 public class ScreenShotter {
 	
 	// TODO http://stackoverflow.com/questions/5953525/run-java-application-at-windows-startup
-	
+	// TODO add GUI
+	// TODO add other upload clients
 	
 	/* 			NECESSARY CONFIGURATIONS
 	 * * * * * * * * * * * * * * * * * * * * * * * * *
