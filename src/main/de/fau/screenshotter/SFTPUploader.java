@@ -13,6 +13,11 @@ public class SFTPUploader implements ScreenshotUploader {
     final static String sftp_password = "<put password here>";
 
     @Override
+    public String prefetchUrl(String filename) {
+        return "http://" + sftp_user + "." + sftp_host + sftp_subpath + filename;
+    }
+
+    @Override
     public String upload(String filename) throws Exception {
         JSch js = new JSch();
         Session ses = js.getSession(sftp_user, sftp_host, 22);
