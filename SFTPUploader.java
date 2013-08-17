@@ -12,8 +12,16 @@ public class SFTPUploader implements Uploader {
 	final static String sftp_password = "<put password here>";
 	
 	
+	
+	
+	public String prefetchLink(String filename) {
+		return String fileURL = "http://"+sftp_user+"."+sftp_host+sftp_subpath+filename;
+	}
+	
+	
+	
 
-	public String uploadScreenshot(String filename) throws Exception {
+	public void uploadScreenshot(String filename) throws Exception {
 		JSch js = new JSch();
 		Session ses = js.getSession(sftp_user, sftp_host, 22);
 		ses.setPassword(sftp_password);
@@ -35,10 +43,11 @@ public class SFTPUploader implements Uploader {
 		
 		
 		// Build http-link to save in clipboard after upload.
-		
+		/*
 		String fileURL = "http://"+sftp_user+"."+sftp_host+sftp_subpath+filename;
 		System.out.println("File-URL: " + fileURL);
 		return fileURL;
+		*/
 	}
 
 
