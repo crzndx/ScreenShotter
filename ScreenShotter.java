@@ -25,9 +25,7 @@ import com.jcraft.jsch.*;
 
 
 public class ScreenShotter {
-	
-	// this is an obvious change. :)
-	
+		
 	// TODO http://stackoverflow.com/questions/5953525/run-java-application-at-windows-startup
 	// TODO add GUI
 	// TODO add other upload clients
@@ -97,19 +95,22 @@ public class ScreenShotter {
 	 */
 	public static void triggerActivated() throws Exception {
 		// Zeitmessung start
-		long start = System.currentTimeMillis(); // LOL
+		long start = System.currentTimeMillis();
 		
-		linkToClipboard("Sorry, the program needs some time to upload. Try to paste link again in some seconds...");
 		
-		String filename = makeAndSaveScreenShot();
+		String filename = makeScreenshot();
 		
 		Uploader upl = new SFTPUploader();
 		
-		String httplink = upl.uploadScreenshot(filename);
-		
+		String httplink = upl.prefetchLink(filename);
+		linkToClipboard(httplink);
+
 		String shorted = shortenURL(httplink);
-		
 		linkToClipboard(shorted);
+		
+		upl.uploadScreenshot(filename);
+		
+
 		
 		if(playTune) playSound();
 		
@@ -119,10 +120,11 @@ public class ScreenShotter {
 		System.out.println("Dauer: " + finalezeit + "ms");
 	}
 
+	
+	
 
 
-
-	public static String makeAndSaveScreenShot() throws AWTException, IOException {
+	public static String makeScreenshot() throws AWTException, IOException {
 			SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy-hh-mm-ss");
 	 
 	        Calendar now = Calendar.getInstance();
