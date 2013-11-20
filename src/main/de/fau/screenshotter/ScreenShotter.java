@@ -23,8 +23,6 @@ import javax.imageio.ImageIO;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 
-import com.jcraft.jsch.*;
-
 
 public class ScreenShotter {
 	

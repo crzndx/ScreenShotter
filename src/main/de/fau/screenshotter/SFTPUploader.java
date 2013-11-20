@@ -3,7 +3,6 @@ package de.fau.screenshotter;
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
-import de.fau.screenshotter.Uploader;
 
 
 public class SFTPUploader implements Uploader {
