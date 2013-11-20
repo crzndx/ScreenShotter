@@ -1,4 +1,4 @@
-package de.crzndx.screenshotter;
+package de.fau.screenshotter;
 
 import java.awt.AWTException;
 import java.awt.Rectangle;

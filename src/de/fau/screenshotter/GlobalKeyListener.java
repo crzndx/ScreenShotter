@@ -1,4 +1,4 @@
-package de.crzndx.screenshotter;
+package de.fau.screenshotter;
 
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.keyboard.NativeKeyEvent;

@@ -1,4 +1,4 @@
-package de.crzndx.screenshotter;
+package de.fau.screenshotter;
 
 import java.lang.System;
 import java.util.concurrent.TimeUnit;
