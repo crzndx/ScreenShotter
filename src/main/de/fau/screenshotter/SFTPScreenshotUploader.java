@@ -26,11 +26,16 @@ public class SFTPScreenshotUploader implements ScreenshotUploader {
         ChannelSftp channel = (ChannelSftp) ses.openChannel("sftp");
         channel.connect();
 
-        long uplstart = System.currentTimeMillis();
+        // Start measuring upload duration.
+        StopWatch watch = StopWatch.start();
+
         channel.put(filename, sftp_wwwfolder + sftp_subpath + filename);
         System.out.println("Successfully uploaded.");
-        long uplend = System.currentTimeMillis();
-        System.out.println("Upload dauerte: " + (uplend - uplstart) + "ms");
+
+        // How long did the upload take?
+        long elapsedTime = watch.time();
+        System.out.println("Total upload time: " + elapsedTime + "ms");
+
         channel.disconnect();
         ses.disconnect();
 
