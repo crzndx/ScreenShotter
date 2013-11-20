@@ -1,3 +1,5 @@
+package de.crzndx.screenshotter;
+
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
