@@ -101,9 +101,9 @@ public class ScreenShotter {
 		
 		String filename = makeAndSaveScreenShot();
 		
-		Uploader upl = new SFTPUploader();
+		ScreenshotUploader upl = new SFTPScreenshotUploader();
 		
-		String httplink = upl.uploadScreenshot(filename);
+		String httplink = upl.upload(filename);
 		
 		String shorted = shortenURL(httplink);
 		
@@ -146,7 +146,7 @@ public class ScreenShotter {
 	
 	
 	  public static String encrypt(String source) {
-		  String md5 = null;
+		  String md5;
 		  try {
 		      MessageDigest mdEnc = MessageDigest.getInstance("MD5"); // Encryption algorithm
 		      mdEnc.update(source.getBytes(), 0, source.length());
@@ -193,7 +193,7 @@ public class ScreenShotter {
 	        String line;
 
 	        while ((line = rd.readLine()) != null) {
-	            if (line.indexOf("id") > -1) {
+	            if (line.contains("id")) {
 	                // I'm sure there's a more elegant way of parsing
 	                // the JSON response, but this is quick/dirty =)
 	                shortUrl = line.substring(8, line.length() - 2);

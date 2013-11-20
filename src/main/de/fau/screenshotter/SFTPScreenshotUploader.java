@@ -5,7 +5,7 @@ import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
 
 
-public class SFTPUploader implements Uploader {
+public class SFTPScreenshotUploader implements ScreenshotUploader {
 
     final static String sftp_user = "<user name>";
     final static String sftp_host = "<host adress>";
@@ -14,7 +14,7 @@ public class SFTPUploader implements Uploader {
     final static String sftp_password = "<put password here>";
 
 
-    public String uploadScreenshot(String filename) throws Exception {
+    public String upload(String filename) throws Exception {
         JSch js = new JSch();
         Session ses = js.getSession(sftp_user, sftp_host, 22);
         ses.setPassword(sftp_password);
