@@ -1,3 +1,5 @@
+package de.fau.screenshotter;
+
 import java.awt.AWTException;
 import java.awt.Rectangle;
 import java.awt.Robot;
@@ -25,7 +27,7 @@ import com.jcraft.jsch.*;
 
 
 public class ScreenShotter {
-		
+	
 	// TODO http://stackoverflow.com/questions/5953525/run-java-application-at-windows-startup
 	// TODO add GUI
 	// TODO add other upload clients
@@ -95,22 +97,19 @@ public class ScreenShotter {
 	 */
 	public static void triggerActivated() throws Exception {
 		// Zeitmessung start
-		long start = System.currentTimeMillis();
+		long start = System.currentTimeMillis(); // LOL
 		
+		linkToClipboard("Sorry, the program needs some time to upload. Try to paste link again in some seconds...");
 		
-		String filename = makeScreenshot();
+		String filename = makeAndSaveScreenShot();
 		
 		Uploader upl = new SFTPUploader();
 		
-		String httplink = upl.prefetchLink(filename);
-		linkToClipboard(httplink);
-
+		String httplink = upl.uploadScreenshot(filename);
+		
 		String shorted = shortenURL(httplink);
+		
 		linkToClipboard(shorted);
-		
-		upl.uploadScreenshot(filename);
-		
-
 		
 		if(playTune) playSound();
 		
@@ -120,11 +119,10 @@ public class ScreenShotter {
 		System.out.println("Dauer: " + finalezeit + "ms");
 	}
 
-	
-	
 
 
-	public static String makeScreenshot() throws AWTException, IOException {
+
+	public static String makeAndSaveScreenShot() throws AWTException, IOException {
 			SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy-hh-mm-ss");
 	 
 	        Calendar now = Calendar.getInstance();
