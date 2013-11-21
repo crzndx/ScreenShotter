@@ -5,6 +5,7 @@ import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
@@ -51,9 +52,8 @@ public class ScreenShotter {
 	 * here. Actual keys are 37 (left arrow) and 39
 	 * which is the right arrow.
 	 */
-
-	final static int triggerKey1 = 37; // left  arrow
-	final static int triggerKey2 = 39; // right arrow
+    final static int triggerKey1 = KeyEvent.VK_LEFT;
+    final static int triggerKey2 = KeyEvent.VK_RIGHT;
 	
 	/* 
 	 * Google URL Shortener API Key must be declared here.
@@ -103,9 +103,9 @@ public class ScreenShotter {
 		
 		String filename = makeAndSaveScreenShot();
 		
-		Uploader upl = new SFTPUploader();
+		ScreenshotUploader upl = new SFTPUploader();
 		
-		String httplink = upl.uploadScreenshot(filename);
+		String httplink = upl.upload(filename);
 		
 		String shorted = shortenURL(httplink);
 		
@@ -195,7 +195,7 @@ public class ScreenShotter {
 	        String line;
 
 	        while ((line = rd.readLine()) != null) {
-	            if (line.indexOf("id") > -1) {
+	            if (line.contains("id")) {
 	                // I'm sure there's a more elegant way of parsing
 	                // the JSON response, but this is quick/dirty =)
 	                shortUrl = line.substring(8, line.length() - 2);
@@ -205,9 +205,6 @@ public class ScreenShotter {
 
 	        wr.close();
 	        rd.close();
-	    }
-	    catch (MalformedURLException ex) {
-	    	ex.getMessage();
 	    } catch (IOException ex) {
 	    	ex.getMessage();
 	    }

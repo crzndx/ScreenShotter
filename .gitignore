@@ -50,3 +50,6 @@ Icon
 
 # Gradle build tool
 .gradle
+
+# Buildshit
+/build
