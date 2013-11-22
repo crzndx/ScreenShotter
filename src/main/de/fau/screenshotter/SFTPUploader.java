@@ -3,8 +3,6 @@ package de.fau.screenshotter;
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
-import de.fau.screenshotter.ScreenshotUploader;
-
 
 public class SFTPUploader implements ScreenshotUploader {
 
@@ -27,14 +25,13 @@ public class SFTPUploader implements ScreenshotUploader {
         ChannelSftp channel = (ChannelSftp) ses.openChannel("sftp");
         channel.connect();
 
-        long uplstart = System.currentTimeMillis();
+        StopWatch watch = StopWatch.start();
+
         channel.put(filename, sftp_wwwfolder + sftp_subpath + filename);
-        System.out.println("Successfully uploaded.");
-        long uplend = System.currentTimeMillis();
-        System.out.println("Upload dauerte: " + (uplend - uplstart) + "ms");
+
+        System.out.println(String.format("Successfully uploaded screenshot in %d ms", watch.time()));
         channel.disconnect();
         ses.disconnect();
-
 
         // Build http-link to save in clipboard after upload.
 
