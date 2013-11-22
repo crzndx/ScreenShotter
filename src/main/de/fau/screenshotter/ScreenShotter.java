@@ -64,7 +64,7 @@ public class ScreenShotter {
         triggerKeys.add(KeyEvent.VK_RIGHT);
 		startKeyListener(triggerKeys);
 	}
-	
+
 	/*
 	 * Starts JNativeListener to listen to
 	 * background keypresses on a system-wide level
@@ -92,8 +92,7 @@ public class ScreenShotter {
 	 * make screenshot, afterwards upload.
 	 */
 	public static void triggerActivated() throws Exception {
-		// Zeitmessung start
-		long start = System.currentTimeMillis(); // LOL
+		StopWatch watch = StopWatch.start();
 		
 		linkToClipboard("Sorry, the program needs some time to upload. Try to paste link again in some seconds...");
 		
@@ -108,17 +107,11 @@ public class ScreenShotter {
 		linkToClipboard(shorted);
 		
 		if(playTune) playSound();
-		
-		// Zeitmessung ende
-		long end = System.currentTimeMillis();
-		long finalezeit = end - start;
-		System.out.println("Dauer: " + finalezeit + "ms");
+
+        System.out.println(String.format("Done in %d ms", watch.time()));
 	}
 
-
-
-
-	public static String makeAndSaveScreenShot() throws AWTException, IOException {
+    public static String makeAndSaveScreenShot() throws AWTException, IOException {
 			SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy-hh-mm-ss");
 	 
 	        Calendar now = Calendar.getInstance();
