@@ -17,6 +17,8 @@ dependencies {
     compile 'com.dropbox.core:dropbox-core-sdk:1.7.5'
     compile 'com.fasterxml.jackson.core:jackson-core:2.2.3'
     compile 'com.jcraft:jsch:0.1.50'
+    compile 'org.slf4j:slf4j-api:1.7.5'
+    compile 'org.slf4j:slf4j-simple:1.7.5'
     compile 'org.jnativehook:JNativeHook:1.1.4'
 }
 

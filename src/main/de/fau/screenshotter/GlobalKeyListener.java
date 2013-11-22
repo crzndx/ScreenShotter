@@ -3,76 +3,54 @@ package de.fau.screenshotter;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.awt.event.KeyEvent;
+import java.util.HashSet;
+import java.util.Set;
 
 public class GlobalKeyListener implements NativeKeyListener {
 
-    private int trigger1;
-    private int trigger2;
-    private boolean trigger1status = false;
-    private boolean trigger2status = false;
+    private final Set<Integer> triggerKeys;
+    private final Set<Integer> currentlyPressedKeys = new HashSet<>();
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    GlobalKeyListener(int trigger1, int trigger2) {
-        this.trigger1 = trigger1;
-        this.trigger2 = trigger2;
+    public GlobalKeyListener(Set<Integer> triggerKeys) {
+        this.triggerKeys = triggerKeys;
     }
-
-    void setTrigger1(int code) {
-        this.trigger1 = code;
-    }
-
-    void setTrigger2(int code) {
-        this.trigger2 = code;
-    }
-
 
     public void nativeKeyPressed(NativeKeyEvent e) {
-        //System.out.println("Key Pressed: " + NativeKeyEvent.getKeyText(e.getKeyCode()));
+        int key = e.getKeyCode();
 
-        if (e.getKeyCode() == NativeKeyEvent.VK_ESCAPE) {
+        // Don't make a screenshot if the user presses ESC
+        if (key == KeyEvent.VK_ESCAPE) {
             GlobalScreen.unregisterNativeHook();
+            return;
         }
 
-        if (e.getKeyCode() == trigger1) {
-            trigger1status = true;
-            System.out.println("links");
+        currentlyPressedKeys.add(key);
+        logger.trace("Key {} was pressed.", key);
 
-        }
-
-        if (e.getKeyCode() == trigger2) {
-            trigger2status = true;
-            System.out.println("rechts");
-
-        }
-
-        if (trigger1status && trigger2status) {
-            System.out.println("BEIDE");
-
-                	/* TRIGGER AUSLOESEN WENN LINKE UND RECHTE PFEILTASTE GLEICHZEITIG AKTIV*/
-
+        // The user can press more than the defined keys.
+        if (currentlyPressedKeys.containsAll(triggerKeys)) {
             try {
                 ScreenShotter.triggerActivated();
-            } catch (Exception e1) {
-                e1.printStackTrace();
+            } catch (Exception ignored) {
             }
 
-            trigger1status = false;
-            trigger2status = false;
+            // Prevents multiple accidental screenshots in case the user
+            // presses all triggerKeys and then another key without releasing
+            // one or more of the triggerKeys.
+            currentlyPressedKeys.clear();
         }
     }
 
     public void nativeKeyReleased(NativeKeyEvent e) {
-        //System.out.println("Key Released: " + NativeKeyEvent.getKeyText(e.getKeyCode()));
-
-        if (e.getKeyCode() == 37) {
-            trigger1status = false;
-        }
-        if (e.getKeyCode() == 39) {
-            trigger2status = false;
-        }
-
+        int key = e.getKeyCode();
+        currentlyPressedKeys.remove(key);
     }
 
     public void nativeKeyTyped(NativeKeyEvent e) {
-        // do nothing
     }
 }

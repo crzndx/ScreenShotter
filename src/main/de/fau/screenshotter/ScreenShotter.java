@@ -13,18 +13,17 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.math.BigInteger;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashSet;
+import java.util.Set;
 import javax.imageio.ImageIO;
 
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
-
-import com.jcraft.jsch.*;
 
 
 public class ScreenShotter {
@@ -46,15 +45,7 @@ public class ScreenShotter {
 	 */
 	
 	final static boolean playTune = true;
-	
-	/*
-	 * Trigger keys for capturing a screenshot are defined
-	 * here. Actual keys are 37 (left arrow) and 39
-	 * which is the right arrow.
-	 */
-    final static int triggerKey1 = KeyEvent.VK_LEFT;
-    final static int triggerKey2 = KeyEvent.VK_RIGHT;
-	
+
 	/* 
 	 * Google URL Shortener API Key must be declared here.
 	 * Create API Key here: https://code.google.com/apis/console
@@ -63,11 +54,16 @@ public class ScreenShotter {
 	
 	final static String googUrl = "https://www.googleapis.com/urlshortener/v1/url?shortUrl=http://goo.gl/fbsS&key=AIzaSyDXmdjeMFOzIjz8n8AS0d031N6LQ86o2Ts";
 
-	
 	public static void main(String[] args) {
-		startKeyListener(triggerKey1, triggerKey2);
+        // We want logging
+        System.setProperty(org.slf4j.impl.SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "TRACE");
+
+        // Run the machinery
+        Set<Integer> triggerKeys = new HashSet<>();
+        triggerKeys.add(KeyEvent.VK_LEFT);
+        triggerKeys.add(KeyEvent.VK_RIGHT);
+		startKeyListener(triggerKeys);
 	}
-	
 	
 	/*
 	 * Starts JNativeListener to listen to
@@ -75,7 +71,7 @@ public class ScreenShotter {
 	 * calls triggerActivated() if passed keys key1 and key2
 	 * are pressed simultaneously.
 	 */
-	public static void startKeyListener(int key1, int key2) {
+	public static void startKeyListener(Set<Integer> triggerKeys) {
 		   try {
 	               GlobalScreen.registerNativeHook();
 		   }
@@ -87,7 +83,7 @@ public class ScreenShotter {
 	       }
 
 	       /* Create KeyListener via JNativeHook */
-	       GlobalScreen.getInstance().addNativeKeyListener(new GlobalKeyListener(key1,key2));
+	       GlobalScreen.getInstance().addNativeKeyListener(new GlobalKeyListener(triggerKeys));
 	}
 	
 	
@@ -148,7 +144,7 @@ public class ScreenShotter {
 	
 	
 	  public static String encrypt(String source) {
-		  String md5 = null;
+		  String md5;
 		  try {
 		      MessageDigest mdEnc = MessageDigest.getInstance("MD5"); // Encryption algorithm
 		      mdEnc.update(source.getBytes(), 0, source.length());
