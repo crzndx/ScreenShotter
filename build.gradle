@@ -1,6 +1,25 @@
 apply plugin: 'java'
 apply plugin: 'idea'
 
+def getCheckedOutGitCommitHash() {
+    def gitFolder = '.git/'
+    def takeFromHash = 12
+    def refSeparator = ':'
+    /*
+     * '.git/HEAD' contains either
+     *      in case of detached head: the currently checked out commit hash
+     *      otherwise: a reference to a file containing the current commit hash
+     */
+    def head = new File(gitFolder + 'HEAD').text.split(refSeparator) // .git/HEAD
+    def isCommit = head.length == 1 // e5a7c79edabbf7dd39888442df081b1c9d8e88fd
+    // def isRef = head.length > 1     // ref: refs/heads/master
+
+    if(isCommit) return head[0].trim().take(takeFromHash) // e5a7c79edabb
+
+    def refHead = new File(gitFolder + head[1].trim()) // .git/refs/heads/master
+    refHead.text.trim().take(takeFromHash)
+}
+
 idea {
     module {
         // If available, we want javadoc and sources attached to our dependencies
@@ -38,6 +57,8 @@ jar {
                    'Main-Class': 'de.fau.screenshotter.ScreenShotter'
     }
 
+    classifier = getCheckedOutGitCommitHash()
+
     from {
         configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
     }
@@ -47,4 +68,3 @@ jar {
 task wrapper(type: Wrapper) {
     gradleVersion = '1.9'
 }
-
