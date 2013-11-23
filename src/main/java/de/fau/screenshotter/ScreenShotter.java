@@ -1,17 +1,16 @@
 package de.fau.screenshotter;
 
-import java.awt.AWTException;
-import java.awt.Rectangle;
-import java.awt.Robot;
-import java.awt.Toolkit;
+import org.jnativehook.GlobalScreen;
+import org.jnativehook.NativeHookException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.math.BigInteger;
 import java.net.URL;
 import java.net.URLConnection;
@@ -20,13 +19,11 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
-import javax.imageio.ImageIO;
-
-import org.jnativehook.GlobalScreen;
-import org.jnativehook.NativeHookException;
 
 
 public class ScreenShotter {
+
+    private static final Logger logger = LoggerFactory.getLogger(ScreenShotter.class);
 	
 	// TODO http://stackoverflow.com/questions/5953525/run-java-application-at-windows-startup
 	// TODO add GUI
@@ -78,7 +75,6 @@ public class ScreenShotter {
 	       catch (NativeHookException ex) {
 	               System.err.println("There was a problem registering the native hook.");
 	               System.err.println(ex.getMessage());
-
 	               System.exit(1);
 	       }
 
