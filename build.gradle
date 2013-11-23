@@ -3,6 +3,7 @@ apply plugin: 'idea'
 
 idea {
     module {
+        // If available, we want javadoc and sources attached to our dependencies
         downloadJavadoc = true
         downloadSources = true
     }
@@ -10,6 +11,8 @@ idea {
 
 repositories {
     mavenCentral()
+
+    // Not all dependencies are on mavenCentral(). Some of them are available only locally.
     flatDir(dirs: 'lib')
 }
 
@@ -19,22 +22,29 @@ dependencies {
     compile 'com.jcraft:jsch:0.1.50'
     compile 'org.slf4j:slf4j-api:1.7.5'
     compile 'org.slf4j:slf4j-simple:1.7.5'
+
+    // This one is resolved from the 'lib' folder. Sources and javadoc are not attached somehow.
     compile 'org.jnativehook:JNativeHook:1.1.4'
+
+    testCompile 'junit:junit:4.+'
 }
 
 sourceCompatibility = 1.7
-version = '0.1'
+version = '1.0'
 jar {
     manifest {
         attributes 'Implementation-Title': 'ScreenShotter',
                    'Implementation-Version': version,
                    'Main-Class': 'de.fau.screenshotter.ScreenShotter'
     }
+
     from {
         configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
     }
 }
 
+// This downloads the gradle wrapper to have a common gradle installation for all developers
 task wrapper(type: Wrapper) {
     gradleVersion = '1.9'
 }
+
