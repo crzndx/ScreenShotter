@@ -1,9 +1,5 @@
 package de.fau.screenshotter;
 
-import com.jcraft.jsch.ChannelSftp;
-import com.jcraft.jsch.JSch;
-import com.jcraft.jsch.Session;
-
 public class SFTPUploader implements ScreenshotUploader {
 
     final static String sftp_user = "<user name>";
@@ -19,27 +15,11 @@ public class SFTPUploader implements ScreenshotUploader {
 
     @Override
     public String upload(String filename) throws Exception {
-        JSch js = new JSch();
-        Session ses = js.getSession(sftp_user, sftp_host, 22);
-        ses.setPassword(sftp_password);
-        java.util.Properties config = new java.util.Properties();
-        config.put("StrictHostKeyChecking", "no");
-        ses.setConfig(config);
-        ses.connect();
-
-        ChannelSftp channel = (ChannelSftp) ses.openChannel("sftp");
-        channel.connect();
-
-        StopWatch watch = StopWatch.start();
-
-        channel.put(filename, sftp_wwwfolder + sftp_subpath + filename);
-
-        System.out.println(String.format("Successfully uploaded screenshot in %d ms", watch.time()));
-        channel.disconnect();
-        ses.disconnect();
+        SftpClient sftpClient = new SftpClient(sftp_host, sftp_user, sftp_password);
+        sftpClient.upload(filename, sftp_wwwfolder + sftp_subpath + filename);
+        sftpClient.close();
 
         // Build http-link to save in clipboard after upload.
-
         String fileURL = "http://" + sftp_user + "." + sftp_host + sftp_subpath + filename;
         System.out.println("File-URL: " + fileURL);
         return fileURL;
